@@ -1,0 +1,40 @@
+language: julia
+os:
+  - linux
+julia:
+  - 0.6
+notifications:
+  email: false
+git:
+  depth: 99999999
+cache:
+  timeout: 1000
+  directories:
+    - downloads
+env:
+  global:
+    - BINARYBUILDER_DOWNLOADS_CACHE=downloads
+    - BINARYBUILDER_AUTOMATIC_APPLE=false
+sudo: required
+
+# Before anything else, get the latest versions of things
+before_script:
+  - julia -e 'Pkg.clone("https://github.com/JuliaPackaging/BinaryProvider.jl")'
+  - julia -e 'Pkg.clone("https://github.com/JuliaPackaging/BinaryBuilder.jl"); Pkg.build()'
+
+script:
+  - julia build_tarballs.jl
+
+
+deploy:
+    provider: releases
+    api_key:
+        # Note; this api_key is only valid for SimonDanisch/LibTIFFBuilder; you need
+        # to make your own: https://docs.travis-ci.com/user/deployment/releases/
+        secure: gqZouJIhkwLq5wRHKvYx3xS2i8fNLUUAyc3er4iPSZxvupUBqgh9zJTASs3hpTfY26nNVnzlMBspt1+59N2EdMtA7WCNGQoxyDAuhI+TxTn4CCNameqRWcDBpPTEcqD+RJSLtYBd6Az8T1b48t7OLm+TQVAPWdqthxzjGgKGsI7JIFRodleJj0EPviySYUbF7jWGyibZUV/iip2NdkfgDxPBg7nRiFz+OuEu/Z+jDQvusxv18mtqGLTkYkyed3HUoSBRYPYs9R973WK3deYHyoaQtNPYlb6K2GTfReW2L3dp5kakQ+p+6Gj+YoLdAjDmctktazxySSEzKu5WZ/XIjzAVST6OUWRnEba/3lyqoZuxyBEmIFED0SpDQzBf8TvWzED/SRb4OOIH/UPdh8mvwmT28Meqp8S8+ieFkFfs6gQWMhpuwmwqD8n9Arr45Oj3T0p84y59lhuXnDc9VMHJequmq7ll3/5yLNRMsp/MFe10axJTqfZ6oKnJ+BS9sghNlM0ZNSh4BYpQf6+U8+V+WbEQPHo1AvV6YefhAe03tdcvOpLT7vysR2pDXtNoS1mexQZv8KsYExWy0W9GId9ovF1sx1TjpVvCKDgodo4TfYffHrIAdo8m2YjBCPzIfeQOLlF4iO7JXohD2N9bU8YPTZxs4/yOGyc8EWUPpj2BCh0=
+    file_glob: true
+    file: products/*
+    skip_cleanup: true
+    on:
+        repo: SimonDanisch/LibTIFFBuilder
+        tags: true
