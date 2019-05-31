@@ -7,20 +7,16 @@ version = v"4.0.9"
 
 # Collection of sources required to build libtiff
 sources = [
-    "https://gitlab.com/libtiff/libtiff.git" =>
-    "020bd2fd3b4235b2175dafa9633d2b191c50e7cd",
-
+    "https://gitlab.com/libtiff/libtiff/-/archive/Release-v4-0-9/libtiff-Release-v4-0-9.tar.gz" =>
+    "6656637a1183c32227334fc0d0d08e011e3da74804bcdcaec496723a9612f97a",
 ]
 
 # Bash recipe for building across all platforms
 script = raw"""
-cd $WORKSPACE/srcdir
-cd libtiff/
+cd $WORKSPACE/srcdir/libtiff*/
 cmake -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_TOOLCHAIN_FILE=/opt/$target/$target.toolchain
-make
+make -j${nproc}
 make install
-exit
-
 """
 
 # These are the platforms we will build for by default, unless further
@@ -35,8 +31,8 @@ products(prefix) = [
 
 # Dependencies that must be installed before this package can be built
 dependencies = [
-    "https://github.com/bicycle1885/ZlibBuilder/releases/download/v1.0.2/build_Zlib.v1.2.11.jl",
-    "https://github.com/SimonDanisch/LibpngBuilder/releases/download/1.0.0/build_libpng.v1.6.31.jl",
+    "https://github.com/bicycle1885/ZlibBuilder/releases/download/v1.0.4/build_Zlib.v1.2.11.jl",
+    "https://github.com/SimonDanisch/LibpngBuilder/releases/download/v1.0.2/build_libpng.v1.6.31.jl",
     "https://github.com/SimonDanisch/LibJPEGBuilder/releases/download/v9b/build_libjpeg.v9.0.0-b.jl"
 ]
 
