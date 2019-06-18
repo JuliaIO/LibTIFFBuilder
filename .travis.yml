@@ -19,7 +19,7 @@ sudo: required
 
 # Before anything else, get the latest versions of things
 before_script:
-  - julia -e 'using Pkg; pkg"add BinaryProvider"; pkg"add BinaryBuilder#master"; Pkg.build()'
+  - julia -e 'using Pkg; pkg"add BinaryProvider BinaryBuilder#master; build"'
 
 script:
   - julia build_tarballs.jl
@@ -35,5 +35,5 @@ deploy:
     file: products/*
     skip_cleanup: true
     on:
-        repo: SimonDanisch/LibTIFFBuilder
+        repo: JuliaIO/LibTIFFBuilder
         tags: true
